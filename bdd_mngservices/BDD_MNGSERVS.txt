@@ -1,0 +1,108 @@
+Create Database mngservices CHARACTER SET utf8 COLLATE utf8_general_ci;
+use mngservices;
+
+Create table MNG_CUENTA_TB1(
+idCuenta int auto_increment not null,
+contraseÃ±a blob not null,
+idCommerce int,
+primary key (idCuenta)
+);
+
+Create table MNG_USUARIO_TB2(
+idUsuario int auto_increment  not null,
+nombre varchar(50),
+apellido varchar(50),
+fechaDeNacimento date,
+crew varchar(30),
+nickname varchar(30),
+imagen longblob,
+idBooking int,
+idBadge int,
+idTrabajos int,
+idCuenta int,
+PRIMARY KEY (idUsuario)
+);
+
+
+Create table MNG_EVENTOS_TB3(
+idEventos int auto_increment not null,
+tipoEvento varchar (50),
+descripcion varchar (250),
+idCalendario int,
+idBooking int,
+PRIMARY KEY (idEventos)
+);
+
+Create table MNG_BADGE_TB4(
+idBadge int auto_increment not null,
+disponibilidad varchar(30),
+PRIMARY KEY (idBadge));
+
+Create table MNG_BOOKING_TB5(
+idBooking int auto_increment  not null,
+idEventos int,
+descripcion varchar (250),
+PRIMARY KEY (idBooking)
+);
+
+Create table MNG_CALENDARIO_TB6(
+idCalendario int auto_increment  not null,
+fecha date,
+descripcion varchar (250),
+lugar varchar (150),
+geoposicionamiento varchar (100),
+PRIMARY KEY (idCalendario));
+
+Create table MNG_COMMERCE_TB7(
+idCommerce int auto_increment  not null,
+idArticulo int,
+PRIMARY KEY(idCommerce));
+
+
+Create table MNG_ARTICULO_TB8(
+idArticulo int auto_increment  not null,
+descripcion varchar(150),
+precio double(4,2),
+imagen longblob,
+idUsuario int not null,
+PRIMARY KEY( idArticulo));
+
+Create table MNG_TRABAJOS_TB9(
+idTrabajos int auto_increment  not null,
+fecha date,
+imagen longblob,
+descripciÃ³n varchar(250),
+PRIMARY KEY (idTrabajos));
+
+
+ALTER TABLE MNG_COMMERCE_TB7
+ADD CONSTRAINT idArticulo FOREIGN KEY (idArticulo)
+REFERENCES MNG_ARTICULO_TB8(idArticulo);
+
+ALTER TABLE MNG_EVENTOS_TB3
+ADD CONSTRAINT idCalendario FOREIGN KEY (idCalendario)
+REFERENCES MNG_CALENDARIO_TB6(idCalendario);
+
+ALTER TABLE MNG_USUARIO_TB2
+ADD CONSTRAINT idBooking FOREIGN KEY (idBooking)
+REFERENCES MNG_BOOKING_TB5(idBooking);
+
+ALTER TABLE MNG_USUARIO_TB2
+ADD CONSTRAINT idCuenta FOREIGN KEY (idCuenta)
+REFERENCES MNG_CUENTA_TB1(idCUenta);
+
+ALTER TABLE MNG_BOOKING_TB5
+ADD CONSTRAINT idEventos FOREIGN KEY (idEventos)
+REFERENCES MNG_EVENTOS_TB3(idEventos);
+
+ALTER TABLE MNG_USUARIO_TB2
+ADD CONSTRAINT idTrabajos FOREIGN KEY (idTrabajos)
+REFERENCES MNG_TRABAJOS_TB9(idTrabajos);
+
+ALTER TABLE MNG_USUARIO_TB2
+ADD CONSTRAINT idBadge FOREIGN KEY (idBadge)
+REFERENCES MNG_BADGE_TB4(idBadge);
+
+ALTER TABLE MNG_ARTICULO_TB8
+ADD CONSTRAINT idUsuario FOREIGN KEY (idUsuario)
+REFERENCES MNG_USUARIO_TB2(idUsuario);
